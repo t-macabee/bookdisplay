@@ -1,6 +1,7 @@
 using eBooks.API.Data;
 using eBooks.API.Entities;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace eBooks.API.Controllers
 {
@@ -16,9 +17,29 @@ namespace eBooks.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Books>>> GetBooks()
+        public async Task<IActionResult> GetBooks()
+        {  
+            var books = await _context.Books.ToListAsync();
+            return Ok(books);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddBook([FromBody] Books newBook)
         {
-            return _context.Books.ToList();
+            if (newBook == null)
+            {
+                return BadRequest("Book data is null.");
+            }
+
+            newBook.Id = 0;
+
+            await _context.Books.AddAsync(newBook);
+            await _context.SaveChangesAsync();
+
+            var createdBook = await _context.Books.FindAsync(newBook.Id);
+
+            return CreatedAtAction(nameof(AddBook), new { id = createdBook.Id }, createdBook);
         }
     }
 }
+
