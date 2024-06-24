@@ -16,7 +16,7 @@ namespace eBooks.API.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<Books> GetBooks()
+        public async Task<ActionResult<IEnumerable<Books>>> GetBooks()
         {
             return _context.Books.ToList();
         }
