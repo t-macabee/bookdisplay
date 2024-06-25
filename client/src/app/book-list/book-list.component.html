@@ -1,9 +1,21 @@
-<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4">
-  <div *ngFor="let book of books" class="p-4">
-    <img [src]="book.cover_image" [alt]="book.title" [width]="200" [height]="300" class="w-full mb-2">
-    <!-- Adjust width and height values as per your design -->
-    <h2 class="text-lg font-semibold">{{ book.title }}</h2>
-    <p class="text-sm text-gray-600">{{ book.author }}</p>
-    <p class="text-sm text-gray-600">Publication Year: {{ book.publication_year }}</p>
+<div class="flex justify-center">
+  <div class="grid grid-cols-3 gap-1">
+    <div *ngFor="let book of books" class="p-4">
+      <div class="p-2 mb-1 flex justify-center">
+        <img class="object-scale-down h-64 w-96" src="{{ book.cover_image }}" alt="image description">
+      </div>
+      <div class="border-dashed border-b border-black flex items-center justify-between p-2">
+        <p class="text-lg font-semibold">{{ book.title }}</p>
+        <p class="text-sm text-gray-700">{{ book.author }}, {{ book.publication_year }}</p>
+      </div>
+      <div class="flex justify-center space-x-4 mt-2">
+        <button class="bg-red-800 hover:bg-red-950 text-white font-bold py-1 px-3 rounded-full">
+          Like
+        </button>
+        <button class="bg-gray-400 hover:bg-gray-700 text-white font-bold py-1 px-3 rounded-full">
+          Comment
+        </button>
+      </div>
+    </div>
   </div>
 </div>
