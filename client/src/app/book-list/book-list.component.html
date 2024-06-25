@@ -1,0 +1,9 @@
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4">
+  <div *ngFor="let book of books" class="p-4">
+    <img [src]="book.cover_image" [alt]="book.title" [width]="200" [height]="300" class="w-full mb-2">
+    <!-- Adjust width and height values as per your design -->
+    <h2 class="text-lg font-semibold">{{ book.title }}</h2>
+    <p class="text-sm text-gray-600">{{ book.author }}</p>
+    <p class="text-sm text-gray-600">Publication Year: {{ book.publication_year }}</p>
+  </div>
+</div>
