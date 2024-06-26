@@ -1,9 +1,11 @@
 import {Component, OnInit} from '@angular/core';
 import {Book} from "../_models/book";
 import {BooksService} from "../_services/books.service";
-import {NgForOf, NgOptimizedImage} from "@angular/common";
+import {NgClass, NgForOf, NgOptimizedImage} from "@angular/common";
 import {NgxPaginationModule} from "ngx-pagination";
 import {FormsModule} from "@angular/forms";
+import {MatDialog} from "@angular/material/dialog";
+import {BookModalComponent} from "../book-modal/book-modal.component";
 
 @Component({
   selector: 'app-book-list',
@@ -12,7 +14,8 @@ import {FormsModule} from "@angular/forms";
     NgForOf,
     NgOptimizedImage,
     NgxPaginationModule,
-    FormsModule
+    FormsModule,
+    NgClass
   ],
   templateUrl: './book-list.component.html',
   styleUrl: './book-list.component.scss'
@@ -24,31 +27,32 @@ export class BookListComponent implements OnInit {
   page: number = 1;
   pageSize: number = 9;
 
-  constructor(private bookService: BooksService) { }
+  constructor(private bookService: BooksService, private dialog: MatDialog) { }
 
   ngOnInit() {
-    if (typeof sessionStorage !== 'undefined') {
-      const storedPage = sessionStorage.getItem('page');
-      this.page = +(storedPage ?? '1');
-    }
+    this.getPage();
     this.getBooks();
     this.getLikes();
+  }
+
+  getPage() {
+    if (typeof sessionStorage !== 'undefined') {
+      const storedPage = sessionStorage.getItem('page');
+      this.page = storedPage !== null ? +storedPage : 1;
+    }
   }
 
   getBooks() {
     this.bookService.getAllBooks().subscribe(books => {
       this.books = books;
       this.filter = books;
+      this.searchBooks();
     });
   }
 
-  addFilter() {
+  searchBooks() {
     this.filter = this.books.filter(book =>
       book.title.toLowerCase().includes(this.search.toLowerCase()));
-  }
-
-  searchBooks() {
-    this.addFilter();
   }
 
   like(book: Book) {
@@ -67,6 +71,14 @@ export class BookListComponent implements OnInit {
       if(liked) {
         book.liked = JSON.parse(liked);
       }
+    })
+  }
+
+  bookDetails(book: Book) {
+    const dialog = this.dialog.open(BookModalComponent, {
+      height: '350px',
+      width: '350px',
+      data: {book: book}
     })
   }
 

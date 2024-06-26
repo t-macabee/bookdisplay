@@ -10,25 +10,29 @@
   <div class="grid grid-cols-3 gap-1">
     <div *ngFor="let book of filter | paginate: { itemsPerPage: pageSize, currentPage: page } " class="p-4">
       <div class="p-2 mb-1 flex justify-center">
-        <img [src]="book.cover_image" [alt]="book.title + ' cover image'" class="object-scale-down h-64 w-96">
+        <img
+          [src]="book.cover_image"
+          [alt]="book.title + ' cover image'"
+          class="object-scale-down h-64 w-96">
       </div>
       <div class="border-dashed border-b border-black p-2 text-center">
-        <p class="text-lg font-semibold">{{ book.title }}</p>
-        <p class="text-sm text-gray-700">{{ book.author }}, {{ book.publication_year }}</p>
+        <p
+          class="text-lg font-semibold cursor-pointer"
+          (click)="bookDetails(book)">{{ book.title }}</p>
+        <p
+          class="text-sm text-gray-700">
+          {{ book.author }},
+          {{ book.publication_year }}</p>
       </div>
       <div class="flex justify-center space-x-4 mt-2">
         <button (click)="like(book)"
-                [class.bg-red-600]="!book.liked"
+                [class.bg-red-700]="!book.liked"
                 [class.text-white]="!book.liked"
                 [class.bg-white]="book.liked"
                 [class.text-black]="book.liked"
-                class="font-bold py-1 px-3 mt-1 rounded-full">
+                class="font-bold py-2 px-4 mt-1 rounded-lg shadow-md
+                focus:outline-none focus:ring-2 focus:ring-red-500">
           {{ book.liked ? 'Liked' : 'Like' }}
-        </button>
-
-
-        <button class="bg-gray-400 hover:bg-gray-700 text-white font-bold py-1 px-3 mt-1 rounded-full">
-          Comment
         </button>
       </div>
     </div>
