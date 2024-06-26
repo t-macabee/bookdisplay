@@ -1,5 +1,7 @@
 using eBooks.API.Data;
+using eBooks.API.DTOs;
 using eBooks.API.Entities;
+using eBooks.API.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,36 +11,18 @@ namespace eBooks.API.Controllers
     [Route("[controller]")]
     public class BooksController : ControllerBase
     {
-        private readonly DataContext _context;
+        private readonly IBooksService service;
 
-        public BooksController(DataContext context)
+        public BooksController(IBooksService service)
         {
-            _context = context;
+           this.service = service;
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetBooks()
-        {  
-            var books = await _context.Books.ToListAsync();
-            return Ok(books);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> AddBook([FromBody] Books newBook)
+        public async Task<ActionResult<IEnumerable<BooksDto>>> GetBooks()
         {
-            if (newBook == null)
-            {
-                return BadRequest("Book data is null.");
-            }
-
-            newBook.Id = 0;
-
-            await _context.Books.AddAsync(newBook);
-            await _context.SaveChangesAsync();
-
-            var createdBook = await _context.Books.FindAsync(newBook.Id);
-
-            return CreatedAtAction(nameof(AddBook), new { id = createdBook.Id }, createdBook);
+            var result = await service.GetBooks();
+            return Ok(result);
         }
     }
 }

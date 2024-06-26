@@ -1,7 +1,6 @@
-﻿
-namespace eBooks.API.Entities
+﻿namespace eBooks.API.DTOs
 {
-    public class Books
+    public class BooksDto
     {
         public int Id { get; set; }
         public string Title { get; set; }
@@ -10,7 +9,7 @@ namespace eBooks.API.Entities
         public ICollection<string> Genre { get; set; }
         public string Description { get; set; }
         public string CoverImage { get; set; }
-        public bool? Liked { get; set; } 
-        public ICollection<Comments>? Comments { get; set; } 
+        public bool? Liked { get; set; }
+        public ICollection<CommentsDto>? Comments { get; set; }
     }
 }

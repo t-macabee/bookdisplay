@@ -1,10 +1,16 @@
 using eBooks.API.Data;
+using eBooks.API.Helpers;
+using eBooks.API.Interfaces;
+using eBooks.API.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
+builder.Services.AddTransient<IBooksService, BooksService>();
+builder.Services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
 
 builder.Services.AddControllers();
 
