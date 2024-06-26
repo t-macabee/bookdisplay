@@ -27,7 +27,12 @@ export class BookListComponent implements OnInit {
   constructor(private bookService: BooksService) { }
 
   ngOnInit() {
-        this.getBooks();
+    if (typeof sessionStorage !== 'undefined') {
+      const storedPage = sessionStorage.getItem('page');
+      this.page = +(storedPage ?? '1');
+    }
+    this.getBooks();
+    this.getLikes();
   }
 
   getBooks() {
@@ -37,8 +42,36 @@ export class BookListComponent implements OnInit {
     });
   }
 
+  addFilter() {
+    this.filter = this.books.filter(book =>
+      book.title.toLowerCase().includes(this.search.toLowerCase()));
+  }
+
   searchBooks() {
-    this.filter = this.books.filter(book => book.title.toLowerCase().includes(this.search.toLowerCase()));
-    this.page = 1;
+    this.addFilter();
+  }
+
+  like(book: Book) {
+    book.liked = !book.liked
+    if(book.liked) {
+      localStorage.setItem(`book_${book.id}`, 'true');
+    }
+    else {
+      localStorage.removeItem(`book_${book.id}`);
+    }
+  }
+
+  getLikes() {
+    this.books.forEach(book => {
+      const liked = localStorage.getItem(`book_${book.id}`);
+      if(liked) {
+        book.liked = JSON.parse(liked);
+      }
+    })
+  }
+
+  onPageChange(page: number) {
+    this.page = page;
+    sessionStorage.setItem('page', this.page.toString());
   }
 }
