@@ -7,4 +7,5 @@ export interface Book {
   description: string;
   cover_image: string;
   liked?: boolean;
+  comments?: string[];
 }

@@ -6,6 +6,7 @@ import {NgxPaginationModule} from "ngx-pagination";
 import {FormsModule} from "@angular/forms";
 import {MatDialog} from "@angular/material/dialog";
 import {BookModalComponent} from "../book-modal/book-modal.component";
+import {CommentModalComponent} from "../comment-modal/comment-modal.component";
 
 @Component({
   selector: 'app-book-list',
@@ -78,6 +79,14 @@ export class BookListComponent implements OnInit {
     const dialog = this.dialog.open(BookModalComponent, {
       height: '350px',
       width: '350px',
+      data: {book: book}
+    })
+  }
+
+  comments(book: Book) {
+    const dialog = this.dialog.open(CommentModalComponent, {
+      height: '600px',
+      width: '500px',
       data: {book: book}
     })
   }

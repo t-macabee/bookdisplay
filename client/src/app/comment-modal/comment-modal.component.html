@@ -1,0 +1,18 @@
+<div class="p-4">
+  <p class="pt-2 font-sans text-2xl antialiasing font-bold leading-relaxed text-blue-gray-500 text-center mb-2 underline">
+    {{ data.book.title }}
+  </p>
+  <textarea [(ngModel)]="comment" class="w-full p-2 border rounded mb-4" placeholder="Add your comment"></textarea>
+  <div class="flex justify-end mb-4">
+    <button (click)="add()" class="px-3 py-1 bg-green-500 text-white rounded-lg focus:outline-none mr-2">
+      Add
+    </button>
+    <button (click)="closeDialog()" class="px-3 py-1 bg-gray-200 text-gray-700 rounded-lg focus:outline-none">
+      Cancel
+    </button>
+  </div><hr><br>
+  <p class="pt-2 font-sans antialiasing font-bold leading-relaxed text-blue-gray-500 text-center mb-2 ">Comments</p>
+  <ul class="list-disc pl-5">
+    <li *ngFor="let comment of data.book.comments" class="mb-2">{{ comment }}</li>
+  </ul>
+</div>
