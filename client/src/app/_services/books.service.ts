@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {Book} from "../_models/book";
 
@@ -7,11 +7,24 @@ import {Book} from "../_models/book";
   providedIn: 'root'
 })
 export class BooksService {
-  private apiUrl = 'https://freetestapi.com/api/v1/books';
+  private apiUrl = 'https://localhost:5001/Books/';
 
   constructor(private http: HttpClient) { }
 
-  getAllBooks(): Observable<Book[]> {
-    return this.http.get<Book[]>(this.apiUrl);
+  getAllBooks(page: number): Observable<Book[]> {
+    const params = new HttpParams()
+      .set('page', page.toString());
+
+    const options = {
+      headers: new HttpHeaders({'Content-Type': 'application/json'}),
+      params: params,
+      withCredentials: true
+    };
+
+    return this.http.get<Book[]>(this.apiUrl, options);
+  }
+
+  likeBook(id: number): Observable<boolean> {
+    return this.http.post<boolean>(`${this.apiUrl}${id}/like`, null);
   }
 }

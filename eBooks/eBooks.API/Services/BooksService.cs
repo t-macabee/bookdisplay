@@ -19,13 +19,21 @@ namespace eBooks.API.Services
             this.mapper = mapper;
         }
 
-        public async Task<List<BooksDto>> GetBooks(int page, int pageSize)
+        public async Task<List<BooksDto>> GetBooks(int? page, int? pageSize)
         {
-            var books = await context.Books
-            .Include(x => x.Comments)            
-            .Skip((page - 1) * pageSize)
-            .Take(pageSize)
-            .ToListAsync();
+            IQueryable<Books> query = context.Books.Include(x => x.Comments);
+
+            query = query.OrderBy(x => x.Id);
+
+            if(page.HasValue && pageSize.HasValue)
+            {
+                int pageNumber = Math.Max(page ?? 1, 1);
+                int size = Math.Max(pageSize ?? 9, 1);
+
+                query = query.Skip((pageNumber - 1) * size).Take(size);
+            }
+
+            var books = await query.ToListAsync();
 
             return mapper.Map<List<BooksDto>>(books);            
         }
@@ -42,6 +50,7 @@ namespace eBooks.API.Services
             };
 
             book.Comments ??= new List<Comments>();
+
             book.Comments.Add(comment);
 
             await context.SaveChangesAsync();

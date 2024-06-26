@@ -20,7 +20,7 @@ namespace eBooks.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<BooksDto>>> GetBooks(int page = 1, int pageSize = 9)
+        public async Task<ActionResult<List<BooksDto>>> GetBooks(int? page = null, int? pageSize = null) 
         {
             var result = await service.GetBooks(page, pageSize);
             return Ok(result);

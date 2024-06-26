@@ -44,7 +44,7 @@ export class BookListComponent implements OnInit {
   }
 
   getBooks() {
-    this.bookService.getAllBooks().subscribe(books => {
+    this.bookService.getAllBooks(this.page).subscribe(books => {
       this.books = books;
       this.filter = books;
       this.searchBooks();
@@ -57,14 +57,11 @@ export class BookListComponent implements OnInit {
   }
 
   like(book: Book) {
-    book.liked = !book.liked
-    if(book.liked) {
-      localStorage.setItem(`book_${book.id}`, 'true');
-    }
-    else {
-      localStorage.removeItem(`book_${book.id}`);
-    }
+    this.bookService.likeBook(book.id).subscribe(result => {
+      book.liked = result;
+    });
   }
+
 
   getLikes() {
     this.books.forEach(book => {
