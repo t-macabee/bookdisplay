@@ -9,7 +9,7 @@
         public ICollection<string> Genre { get; set; }
         public string Description { get; set; }
         public string CoverImage { get; set; }
-        public bool? Liked { get; set; }
+        public bool Liked { get; set; }
         public ICollection<CommentsDto>? Comments { get; set; }
     }
 }

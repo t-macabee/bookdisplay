@@ -6,11 +6,16 @@ namespace eBooks.API.Helpers
 {
     public class AutoMapperProfiles : Profile
     {
-        public AutoMapperProfiles() 
+        public AutoMapperProfiles()
         {
             CreateMap<Books, BooksDto>()
-                .ForMember(dest => dest.Comments, opt => opt.MapFrom(src => src.Comments));
-            CreateMap<Comments, CommentsDto>();
+            .ForMember(dest => dest.Liked, opt => opt.MapFrom(src => src.Liked ?? false))
+            .ForMember(dest => dest.Comments, opt => opt.MapFrom(src => src.Comments.Select(c => new CommentsDto
+            {
+                Id = c.Id,
+                Content = c.Content
+            }).ToList()));
+
         }
     }
 }

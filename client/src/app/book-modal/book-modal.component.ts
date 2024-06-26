@@ -9,7 +9,7 @@ import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
   templateUrl: './book-modal.component.html',
   styleUrl: './book-modal.component.scss'
 })
-export class BookModalComponent implements OnInit{
+export class BookModalComponent {
   book: Book;
 
   constructor(
@@ -17,9 +17,6 @@ export class BookModalComponent implements OnInit{
     @Inject(MAT_DIALOG_DATA) public data: any,
   ) {
   this.book = data.book;
-  }
-
-  ngOnInit() {
   }
 
   like(book: Book) {
