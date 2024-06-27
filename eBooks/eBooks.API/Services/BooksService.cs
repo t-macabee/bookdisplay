@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using eBooks.API.Data;
 using eBooks.API.DTOs;
 using eBooks.API.Entities;
 using eBooks.API.Helpers;
 using eBooks.API.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using System.Net;
 
 namespace eBooks.API.Services
 {
@@ -25,7 +27,7 @@ namespace eBooks.API.Services
 
             query = query.OrderBy(x => x.Id);
 
-            if(page.HasValue && pageSize.HasValue)
+            if (page.HasValue && pageSize.HasValue)
             {
                 int pageNumber = Math.Max(page ?? 1, 1);
                 int size = Math.Max(pageSize ?? 9, 1);
@@ -35,9 +37,8 @@ namespace eBooks.API.Services
 
             var books = await query.ToListAsync();
 
-            return mapper.Map<List<BooksDto>>(books);            
+            return mapper.Map<List<BooksDto>>(books);
         }
-    
 
         public async Task<CommentsDto> AddComment(int id, string content)
         {
@@ -56,7 +57,7 @@ namespace eBooks.API.Services
             await context.SaveChangesAsync();
 
             return mapper.Map<CommentsDto>(comment);
-        }
+        }        
 
         public async Task<bool> AddLike(int bookId)
         {
@@ -67,8 +68,6 @@ namespace eBooks.API.Services
             await context.SaveChangesAsync();
 
             return book.Liked ?? false;
-        }
-
-      
+        }        
     }
 }

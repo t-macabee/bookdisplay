@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
-import {Observable} from "rxjs";
+import {map, Observable} from "rxjs";
 import {Book} from "../_models/book";
+
 
 @Injectable({
   providedIn: 'root'
@@ -22,6 +23,11 @@ export class BooksService {
     };
 
     return this.http.get<Book[]>(this.apiUrl, options);
+  }
+
+  addComment(id: number, content: string) {
+    const params = new HttpParams().set('comment', content);
+    return this.http.post(`${this.apiUrl}${id}/comment`, null, { params });
   }
 
   likeBook(id: number): Observable<boolean> {

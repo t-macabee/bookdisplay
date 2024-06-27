@@ -16,6 +16,8 @@ namespace eBooks.API.Helpers
                 Content = c.Content
             }).ToList()));
 
+            CreateMap<Comments, CommentsDto>();
+            CreateMap<CommentsDto, Comments>();
         }
     }
 }

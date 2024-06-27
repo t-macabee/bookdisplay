@@ -8,6 +8,7 @@ import {MatDialog} from "@angular/material/dialog";
 import {BookModalComponent} from "../book-modal/book-modal.component";
 import {CommentModalComponent} from "../comment-modal/comment-modal.component";
 
+
 @Component({
   selector: 'app-book-list',
   standalone: true,
@@ -33,7 +34,6 @@ export class BookListComponent implements OnInit {
   ngOnInit() {
     this.getPage();
     this.getBooks();
-    this.getLikes();
   }
 
   getPage() {
@@ -60,16 +60,6 @@ export class BookListComponent implements OnInit {
     this.bookService.likeBook(book.id).subscribe(result => {
       book.liked = result;
     });
-  }
-
-
-  getLikes() {
-    this.books.forEach(book => {
-      const liked = localStorage.getItem(`book_${book.id}`);
-      if(liked) {
-        book.liked = JSON.parse(liked);
-      }
-    })
   }
 
   bookDetails(book: Book) {

@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {Book} from "../_models/book";
 import {FormsModule} from "@angular/forms";
+import {BooksService} from "../_services/books.service";
 
 @Component({
   selector: 'app-comment-modal',
@@ -15,38 +16,36 @@ import {FormsModule} from "@angular/forms";
   styleUrl: './comment-modal.component.scss'
 })
 export class CommentModalComponent implements OnInit{
-  comment: string = '';
+  book: Book;
+  newComment: any;
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data: { book: Book },
-    public dialogRef: MatDialogRef<CommentModalComponent>
-  ) {}
-
-  ngOnInit() {
-    this.loadData();
+    public dialogRef: MatDialogRef<CommentModalComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private service: BooksService
+  ) {
+    this.book = data.book;
   }
 
- loadData() {
-   const stored = localStorage.getItem(`book_${this.data.book.id}`);
-   if (stored) {
-     this.data.book = JSON.parse(stored);
-   }
- }
-
- add() {
-    if (this.comment.trim() !== '') {
-      this.data.book.comments = this.data.book.comments || []; // Initialize comments if undefined
-      this.data.book.comments.push(this.comment.trim());
-      this.save();
-      this.comment = '';
-    }
+  addComment(content: string) {
+    this.service.addComment(this.book.id, content).subscribe({
+      next: (result: any) => {
+        if (!this.book.comments) {
+          this.book.comments = [];
+        }
+        this.book.comments.push(result);
+      }
+    });
   }
 
-  save() {
-    localStorage.setItem(`book_${this.data.book.id}`, JSON.stringify(this.data.book));
+  ngOnInit(): void {
+
   }
 
   closeDialog() {
     this.dialogRef.close();
   }
+
+
+
 }
